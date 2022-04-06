@@ -5,17 +5,18 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.Properties;
 
-public class JdbcUtil
-{
+public class DataAccess {
+
+    private static String properties = "src/main/resources/DataAccess.properties";
     private static Connection conn = null;
-    private static Properties prop;
+    private static Properties prop = null;
 
     static
     {
         try
         {
             prop = new Properties();
-            prop.load(new FileInputStream("src/main/resources/jdbc.properties"));
+            prop.load(new FileInputStream(properties));
             String propName = "jdbc.connection.drv";
             String drv = prop.getProperty(propName);
             Class.forName(drv);
@@ -57,4 +58,25 @@ public class JdbcUtil
             throw new RuntimeException(e);
         }
     }
+
+    public static Transaction beginTransaction ()
+    {
+        return new Transaction( getConnection() );
+    }
+
+    public static <T> T getObject ( String objName )
+    {
+        try
+        {
+            String classname = prop.getProperty(objName);
+            Class<?> clazz = Class.forName(classname);
+            return (T)clazz.newInstance();
+        }
+        catch (Exception ex)
+        {
+            ex.printStackTrace();
+            throw new RuntimeException(ex);
+        }
+    }
+
 }

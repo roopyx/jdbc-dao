@@ -9,7 +9,7 @@ public class ShutdownHookImple extends Thread
     {
         try
         {
-            Connection conn = JdbcUtil.getConnection();
+            Connection conn = DataAccess.getConnection();
             conn.close();
             System.out.println("bye bye...");
         }

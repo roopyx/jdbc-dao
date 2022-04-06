@@ -1,6 +1,6 @@
 package entities;
 
-import utils.JdbcUtil;
+import utils.DataAccess;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,7 +22,7 @@ public class TipoClienteDAO
 
         try
         {
-            Connection connection = JdbcUtil.getConnection();
+            Connection connection = DataAccess.getConnection();
 
             preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, idTipoCliente);
