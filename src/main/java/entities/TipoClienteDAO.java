@@ -15,7 +15,7 @@ public class TipoClienteDAO
 
         String sql = "";
 
-        sql += "SELECT idTipoCiente,";
+        sql += "SELECT idTipoCiente";
         sql += ", descripcion";
         sql += " FROM tipo_cliente";
         sql += " WHERE id_tipo_cliente = ?";
