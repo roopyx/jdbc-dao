@@ -1,27 +1,51 @@
 import entities.*;
 import utils.DataAccess;
-import utils.Transaction;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main
 {
+    private Scanner scanner = new Scanner(System.in);
+
+    public int pantalla1 ()
+    {
+        System.out.println("Seleccione una categoria");
+
+        Facade f = DataAccess.getObject("facade");
+        List<Categoria> categorias = f.obtenerCategorias();
+
+        for(Categoria cat: categorias)
+        {
+            System.out.print(cat.getIdCategoria());
+            System.out.println(cat.getDescripcion());
+        }
+        return scanner.nextInt();
+    }
+
+    public int pantalla2 (int idCat)
+    {
+        System.out.println("-Productos de la categoria-");
+
+        Facade f = DataAccess.getObject("facade");
+        List<Producto> productos = f.obtenerProductos(idCat);
+
+        for(Producto prod: productos)
+        {
+            System.out.print(prod.getIdProducto());
+            System.out.println(prod.getDescripcion());
+        }
+        return scanner.nextInt();
+    }
+
     public static void main(String[] args) throws SQLException
     {
+        Main app = DataAccess.getObject("miApp");
 
-        // Comienzo de la transaccion
-        Transaction transaction = DataAccess.beginTransaction();
+        int idCat = app.pantalla1();
 
-        Cliente cliente = new Cliente();
-        cliente.setNombre("Alejandra");
-        cliente.setDireccion("Santa Julia 442");
-        cliente.setTipoCliente(new TipoCliente(1));
-
-        ClienteDAO dao = DataAccess.getObject("clienteDAO");
-        dao.insert(cliente);
-
-        // finalizacion de la transaccion
-        transaction.commit();
+        app.pantalla2(idCat);
 
     }
 }

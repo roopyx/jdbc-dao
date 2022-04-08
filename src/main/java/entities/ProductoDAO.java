@@ -1,6 +1,10 @@
 package entities;
 
+import java.util.List;
+
 public interface ProductoDAO
 {
-    public Producto find (int idProducto);
+    Producto find (int idProducto);
+
+    List<Producto> findProductos(int idCategoria);
 }

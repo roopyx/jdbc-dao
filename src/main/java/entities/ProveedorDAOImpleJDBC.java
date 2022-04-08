@@ -16,7 +16,7 @@ public class ProveedorDAOImpleJDBC implements ProveedorDAO
 
         String sql = "";
 
-        sql += "SELECT idProveedor, empresa, contacto, descripcion";
+        sql += "SELECT id_proveedor, empresa, contacto, direccion";
         sql += " FROM proveedor";
         sql += " WHERE id_proveedor = ?";
 

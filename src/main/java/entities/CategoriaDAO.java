@@ -1,6 +1,10 @@
 package entities;
 
+import java.util.List;
+
 public interface CategoriaDAO
 {
-    public Categoria find (int idCategoria);
+    Categoria find(int idCategoria);
+
+    List<Categoria> findAllCategorias();
 }

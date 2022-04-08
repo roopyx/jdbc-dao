@@ -5,6 +5,8 @@ import utils.DataAccess;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProductoDAOImpleJDBC implements ProductoDAO
 {
@@ -53,7 +55,7 @@ public class ProductoDAOImpleJDBC implements ProductoDAO
                 producto.setProveedor(proveedor);
 
                 int idCategoria = resultSet.getInt("id_categoria");
-                CategoriaDAO categoriaDAO = DataAccess.getObject("categoriaDao");
+                CategoriaDAO categoriaDAO = DataAccess.getObject("categoriaDAO");
                 categoria = categoriaDAO.find(idCategoria);
 
                 producto.setCategoria(categoria);
@@ -80,6 +82,54 @@ public class ProductoDAOImpleJDBC implements ProductoDAO
             {
                 ex2.printStackTrace();
                 throw new RuntimeException();
+            }
+        }
+    }
+
+    @Override
+    public List<Producto> findProductos(int idCategoria)
+    {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        String sql = "";
+        sql += "SELECT *";
+        sql += " FROM producto";
+        sql += " WHERE id_categoria = ?";
+
+        try
+        {
+            Connection connection = DataAccess.getConnection();
+
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, idCategoria);
+
+            resultSet = preparedStatement.executeQuery();
+
+            List<Producto> productos = new ArrayList<>();
+            while ( resultSet.next() )
+            {
+                Producto producto = find(resultSet.getInt("id_producto"));
+                productos.add(producto);
+            }
+            return productos;
+        }
+        catch ( Exception e )
+        {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
+        finally
+        {
+            try
+            {
+                if ( resultSet != null ) resultSet.close();
+                if ( preparedStatement != null ) preparedStatement.close();
+            }
+            catch ( Exception e2 )
+            {
+                e2.printStackTrace();
+                throw new RuntimeException(e2);
             }
         }
     }
